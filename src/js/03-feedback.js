@@ -2,14 +2,18 @@ import throttle from 'lodash.throttle';
 
 const formEl = document.querySelector('.feedback-form');
 const submitEl = document.querySelector('button')
-const formData = {}
+
+let formData = {}
+
 
 if(localStorage.getItem("feedback-form-state")) {
-    const savedData = localStorage.getItem("feedback-form-state")
-    const parsedData = JSON.parse(savedData)
+    const savedData = JSON.parse(localStorage.getItem("feedback-form-state"))
+    const input = formEl.elements
 
-    formEl.elements.email.value = parsedData.email
-    formEl.elements.message.value = parsedData.message
+    input.email.value = savedData.email || '';
+    input.message.value = savedData.message || '';
+
+    formData = savedData
 }
 
 function handleFormInput (e) {
@@ -20,6 +24,9 @@ function handleFormInput (e) {
 
 function handleBtnSubmit (e) {
     e.preventDefault()
+    if(formEl.elements.email.value === '' || formEl.elements.message.value === '') {
+        return alert("Заповніть, будь ласка, всі поля")
+    }
 
     console.log(JSON.parse(localStorage.getItem("feedback-form-state")))
 
